@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h1>This data was refreshed at <b>{{ last_pull }}</b>.</h1>
+    <h2>Please refresh the page to see the latest data, as it is reloaded every 15 minutes.</h2>
+    Sorry, I'm still learning JS
+</div>
+<div>
+    <h2>Top 5 Hottest Airports</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Receipt Time</th>
+      <th>ICAO ID</th>
+      <th>Airport Name</th>
+      <th>Temperature</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in top_hot %}
+   <tr>
+       <td> {{ row.reportTime }} </td>
+       <td> {{ row.icaoId }} </td>
+       <td> {{ row.name }} </td>
+       <td> {{ row.temp }} </td>
+   </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<div>
+    <h2>Top 5 Coldest Airports</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Receipt Time</th>
+      <th>ICAO ID</th>
+      <th>Airport Name</th>
+      <th>Temperature</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in top_cold %}
+     <tr>
+         <td> {{ row.reportTime }} </td>
+         <td> {{ row.icaoId }} </td>
+         <td> {{ row.name }} </td>
+         <td> {{ row.temp }} </td>
+     </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<div>
+    <h2>Top 5 Windiest Airports</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Receipt Time</th>
+      <th>ICAO ID</th>
+      <th>Airport Name</th>
+      <th>Sustained Winds</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in top_wind_speeds %}
+     <tr>
+         <td> {{ row.reportTime }} </td>
+         <td> {{ row.icaoId }} </td>
+         <td> {{ row.name }} </td>
+         <td> {{ row.wspd }} </td>
+     </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

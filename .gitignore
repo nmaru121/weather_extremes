@@ -1,0 +1,12 @@
+*
+weather/Lib/
+!.gitignore
+!templates/
+!app.py
+!scrape.py
+!data/
+!requirements.txt
+!README.md
+/weather
+/weather
+/weather
