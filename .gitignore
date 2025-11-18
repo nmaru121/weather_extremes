@@ -1,5 +1,4 @@
 *
-weather/Lib/
 !.gitignore
 !templates/
 !app.py
