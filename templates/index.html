@@ -1,77 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
+<!--To all my CS major friends who pressed inspect element, hello! Here's a cookie.-->
+<!--Also get a vomit bag ready this is some ass code-->
 <div>
-    <h1>This data was refreshed at <b>{{ last_pull }}</b>.</h1>
-    <h2>Please refresh the page to see the latest data, as it is reloaded every 15 minutes.</h2>
-    Sorry, I'm still learning JS
+    <h1>This data was refreshed at <a id="last_pull"></a>.</h1>
+    <h2>It was passed to the server at <a id="last_fetch"></a></h2>
 </div>
 <div>
     <h2>Top 5 Hottest Airports</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Receipt Time</th>
-      <th>ICAO ID</th>
-      <th>Airport Name</th>
-      <th>Temperature</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for row in top_hot %}
-   <tr>
-       <td> {{ row.reportTime }} </td>
-       <td> {{ row.icaoId }} </td>
-       <td> {{ row.name }} </td>
-       <td> {{ row.temp }} </td>
-   </tr>
-  {% endfor %}
-  </tbody>
+<table id="data_table_hot">
+ 
 </table>
 </div>
 <div>
     <h2>Top 5 Coldest Airports</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Receipt Time</th>
-      <th>ICAO ID</th>
-      <th>Airport Name</th>
-      <th>Temperature</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for row in top_cold %}
-     <tr>
-         <td> {{ row.reportTime }} </td>
-         <td> {{ row.icaoId }} </td>
-         <td> {{ row.name }} </td>
-         <td> {{ row.temp }} </td>
-     </tr>
-    {% endfor %}
-  </tbody>
+<table id="data_table_cold">
+
 </table>
 </div>
 <div>
     <h2>Top 5 Windiest Airports</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Receipt Time</th>
-      <th>ICAO ID</th>
-      <th>Airport Name</th>
-      <th>Sustained Winds</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for row in top_wind_speeds %}
-     <tr>
-         <td> {{ row.reportTime }} </td>
-         <td> {{ row.icaoId }} </td>
-         <td> {{ row.name }} </td>
-         <td> {{ row.wspd }} </td>
-     </tr>
-    {% endfor %}
-  </tbody>
+<table id="data_table_wind_speeds">
+
 </table>
-</div>
+
+
+<script>
+  // Kill me
+function get_data() {console.log("Fetching data...");
+                fetch('/api/stats')
+                  .then(response => response.json())
+                  .then(data => {
+                      let data_table_cold = document.getElementById("data_table_cold");
+                      data_table_cold.innerHTML = "<thead><tr><th>Receipt Time</th><th>ICAO ID</th><th>Airport Name</th><th>Temperature</th></tr></thead><tbody>"; // Clear existing rows
+                      console.log(data);
+                      for (let item of data.top_cold) {
+                          data_table_cold.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.temp}</td></tr>`;
+                      }
+                      data_table_cold.innerHTML += "</tbody>";
+
+                      // Hot Airports
+                      let data_table_hot = document.getElementById("data_table_hot");
+                      data_table_hot.innerHTML = "<thead><tr><th>Receipt Time</th><th>ICAO ID</th><th>Airport Name</th><th>Temperature</th></tr></thead><tbody>"; // Clear existing rows
+                      console.log(data);
+                      for (let item of data.top_hot) {
+                          data_table_hot.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.temp}</td></tr>`;
+                      } 
+                      data_table_hot.innerHTML += "</tbody>";
+                      
+                      // Windiest Airports
+                      let data_table_wind_speeds = document.getElementById("data_table_wind_speeds");
+                      data_table_wind_speeds.innerHTML = "<thead><tr><th>Receipt Time</th><th>ICAO ID</th><th>Airport Name</th><th>Sustained Winds</th></tr></thead><tbody>"; // Clear existing rows
+                      console.log(data);
+                      for (let item of data.top_wind_speeds) {
+                          data_table_wind_speeds.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.wspd}</td></tr>`;
+                      }
+                      data_table_wind_speeds.innerHTML += "</tbody>";
+                      // Time Update
+                      document.getElementById("last_pull").innerText = data.last_pull;
+                      document.getElementById("last_fetch").innerText = new Date().toUTCString();
+                  });
+                }
+    setInterval(function() {
+      var minute = new Date().getMinutes();
+      if ((minute) % 2 === 0)  {// Check if current minute is a multiple of 15
+              get_data();
+                }
+        }, 1000*60); // Refresh data every 60 seconds
+      document.addEventListener('DOMContentLoaded', function() {
+    // Your code here, or call your function
+    get_data();
+});
+</script>
 {% endblock %}

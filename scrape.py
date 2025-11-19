@@ -53,8 +53,8 @@ def get_data():
     finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId")
     finalsheet.to_csv("data/output.csv")
     with open("data/lastpull.txt", "w") as f:
-        f.write(dt.now().strftime("%Y%m%d_%H%M"))
-    return redirect('/')
+        f.write(dt.now(tz.utc).strftime("%Y%m%d_%H%M"))
+    return
 
 def spout_stats():
     sheet = pd.read_csv("data/output.csv")
