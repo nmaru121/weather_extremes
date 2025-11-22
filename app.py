@@ -4,14 +4,19 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__ , template_folder='./templates')
 
-@app.before_request()
-def before_first_request_func():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=get_data, trigger='date')
-    scheduler.add_job(func=get_data, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
-    scheduler.start()
-    click.echo("First request received")
-    return
+initialize = False
+
+@app.before_request
+def before():
+	global initialize
+	if initialize == True:
+		return
+	scheduler = BackgroundScheduler()
+	get_data()
+	scheduler.add_job(func=get_data, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
+	scheduler.start()
+	initialize = True
+	return
 
 @app.route('/')
 def index():
