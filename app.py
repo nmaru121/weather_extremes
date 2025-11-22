@@ -1,11 +1,5 @@
 from flask import Flask, jsonify, render_template
 from scrape import *
-from apscheduler.schedulers.background import BackgroundScheduler
-
-get_data()  # Initial data fetch
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=get_data, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
-scheduler.start()
 
 app = Flask(__name__ , template_folder='./templates')
 

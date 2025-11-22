@@ -6,6 +6,7 @@
 !data/
 !requirements.txt
 !README.md
+!wsgi.py
 /weather
 /weather
 /weather
