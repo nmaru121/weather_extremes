@@ -1,11 +1,10 @@
 from flask import Flask, jsonify, render_template
 from scrape import *
 from apscheduler.schedulers.background import BackgroundScheduler
-import click
 
 app = Flask(__name__ , template_folder='./templates')
 
-@app.cli.command("fetch-data")
+@app.before_request()
 def before_first_request_func():
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=get_data, trigger='date')
