@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template
 from scrape import *
 from apscheduler.schedulers.background import BackgroundScheduler
+import logging
+
 
 app = Flask(__name__ , template_folder='./templates')
 
@@ -12,15 +14,15 @@ def before():
 	if initialize == True:
 		return
 	scheduler = BackgroundScheduler()
-	scheduler.add_job(func=get_data, trigger="date", run_date=dt.now())  # Initial data fetch
-	scheduler.add_job(func=get_data, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
+	scheduler.add_job(func=run_pull, trigger="date", run_date=dt.now())  # Initial data fetch
+	scheduler.add_job(func=run_pull, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
 	scheduler.start()
 	initialize = True
 	return
 
 @app.route('/')
 def index():
-    print("Rendering main page")
+    l.info("Rendering main page")
     return render_template('index.html')
 
 @app.route('/api/stats', methods=['GET'])
