@@ -14,6 +14,7 @@ def debug_print(input):
         print(input)
     return
 
+# TODO: Logging system
 # TODO: Add error handling for network issues, invalid responses, etc.
 def get_data():   
     # Will need to check this when I import onto Pi

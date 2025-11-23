@@ -12,7 +12,7 @@ def before():
 	if initialize == True:
 		return
 	scheduler = BackgroundScheduler()
-	get_data()
+	scheduler.add_job(func=get_data, trigger="date", run_date=dt.now())  # Initial data fetch
 	scheduler.add_job(func=get_data, trigger="cron", minute="3, 18, 33, 48")  # Fetch data every 15 minutes
 	scheduler.start()
 	initialize = True
@@ -37,3 +37,5 @@ def api_stats():
         "last_pull": last_pull_formatted
     }
     return jsonify(response)
+
+# TODO: Search for your closest airport
