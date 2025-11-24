@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Recent Updates</h1>
+        {% for update in updates %}
+            <h2>{{ update.title }}</h2>
+            <p>{{ update.description }}</p>
+        {% endfor %}
+{% endblock %}
