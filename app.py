@@ -5,6 +5,7 @@ import logging
 
 
 app = Flask(__name__ , template_folder='./templates')
+app.config['SERVER_NAME'] = 'localhost:8080'
 
 initialize = False
 
