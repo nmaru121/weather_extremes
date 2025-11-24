@@ -1,8 +1,8 @@
 /weather
 __pycache__/
 *.pyc
-backup.json
-lastpull.txt
-output.csv
+data/backup.json
+data/lastpull.txt
+data/output.csv
 app.log
 updates.py
