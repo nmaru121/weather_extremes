@@ -4,3 +4,5 @@ __pycache__/
 backup.json
 lastpull.txt
 output.csv
+app.log
+updates.py
