@@ -41,4 +41,7 @@ def api_stats():
     }
     return jsonify(response)
 
-# TODO: Search for your closest airport
+@app.route('/updates', methods=['GET'])
+def updates():
+    # Implement the logic for the /updates endpoint
+    return render_template('updates.html', updates=json.load(open("data/updates.json", "r")))
