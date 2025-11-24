@@ -16,6 +16,8 @@ file_handler = logging.FileHandler('app.log')
 file_handler.setFormatter(formatter)
 l.addHandler(file_handler)
 
+# TODO: Logging system
+# TODO: Add error handling for network issues, invalid responses, etc.
 def get_data():   
     global l
     # Will need to check this when I import onto Pi
@@ -61,7 +63,8 @@ def get_data():
         f.write(dt.now(tz.utc).strftime("%Y%m%d_%H%M"))
     return exit_code
 
-
+#NOTE: Not yet putting this in prod, need to check what errors are coming
+#TODO Low priority, but could we optimize by appending on the second run?
 def run_pull():
     exit_code = get_data()
     if exit_code != 0:
