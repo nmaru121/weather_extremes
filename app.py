@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, render_template
 from scrape import *
 from apscheduler.schedulers.background import BackgroundScheduler
-import logging
+import logging as l
 
+l.basicConfig(filename="app.log", level=l.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__ , template_folder='./templates')
 app.config['SERVER_NAME'] = 'localhost:8080'
@@ -42,6 +43,6 @@ def api_stats():
     return jsonify(response)
 
 @app.route('/updates', methods=['GET'])
-def updates():
+def updates_page():
     # Implement the logic for the /updates endpoint
     return render_template('updates.html', updates=json.load(open("data/updates.json", "r")))

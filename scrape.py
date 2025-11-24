@@ -5,21 +5,19 @@ import json
 import math
 from flask import redirect
 from time import sleep
-import logging
+import logging as l
 
-logging.basicConfig(level=logging.DEBUG)
 
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+#formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-l = logging.getLogger(__name__)
-file_handler = logging.FileHandler('app.log')
-file_handler.setFormatter(formatter)
-l.addHandler(file_handler)
+#l = logging.getLogger(__name__)
+#file_handler = logging.FileHandler('app.log')
+#file_handler.setFormatter(formatter)
+#l.addHandler(file_handler)
 
 # TODO: Logging system
 # TODO: Add error handling for network issues, invalid responses, etc.
 def get_data():   
-    global l
     # Will need to check this when I import onto Pi
     exit_code = 0
     l.info("Pulling new data...")
@@ -46,13 +44,13 @@ def get_data():
         #print(url)
         try:
             query = r.get(url)
+            l.info("Batch No " + str(i + 1) + " pulled, status code " + str(query.status_code))
+            jquery = json.loads(query.text)
+            loadobj.extend(jquery)
         except Exception as e:
             l.error("Error during request: " + str(i + 1) + str(e))
             exit_code = 1
             continue
-        l.info("Batch No " + str(i + 1) + " pulled, status code " + str(query.status_code))
-        jquery = json.loads(query.text)
-        loadobj.extend(jquery)
     json.dump(loadobj, open("data/backup.json", "w"))
     newdata = pd.json_normalize(loadobj)
     newdata["receiptTime"] = pd.to_datetime(newdata["receiptTime"])
@@ -73,7 +71,6 @@ def run_pull():
     return
 
 def spout_stats():
-    global l
     sheet = pd.read_csv("data/output.csv")
     sheet["reportTime"] = pd.to_datetime(sheet["reportTime"]).dt.strftime("%Y-%m-%d %H:%M UTC")
     wspd = sheet.nlargest(5, "wspd")[["reportTime","icaoId", "name", "wspd"]].to_dict(orient="records")
