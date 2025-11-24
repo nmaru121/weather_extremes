@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template
 from scrape import *
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging
-
+import json
 
 app = Flask(__name__ , template_folder='./templates')
 app.config['SERVER_NAME'] = 'localhost:8080'
@@ -41,4 +41,8 @@ def api_stats():
     }
     return jsonify(response)
 
-# TODO: Search for your closest airport
+@app.route("/updates")
+def updates():
+    with open("data/updates.json", "r") as f:
+        updates = json.load(f)
+    return render_template("updates.html", updates=updates)
