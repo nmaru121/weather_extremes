@@ -1,7 +1,6 @@
 /weather
 __pycache__/
 *.pyc
-data/backup.json
-data/lastpull.txt
-data/output.csv
-wishlist.txt
+backup.json
+lastpull.txt
+output.csv
