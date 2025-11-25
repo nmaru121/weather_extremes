@@ -55,13 +55,12 @@ def get_data():
     newdata = pd.json_normalize(loadobj)
     newdata["receiptTime"] = pd.to_datetime(newdata["receiptTime"])
     finalsheet = newdata.loc[newdata.groupby('icaoId')['receiptTime'].idxmax()]
-    finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId")
+    # finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId") Not necessary, and does not work
     finalsheet.to_csv("data/output.csv")
     with open("data/lastpull.txt", "w") as f:
         f.write(dt.now(tz.utc).strftime("%Y%m%d_%H%M"))
     return exit_code
 
-#NOTE: Not yet putting this in prod, need to check what errors are coming
 #TODO Low priority, but could we optimize by appending on the second run?
 def run_pull():
     exit_code = get_data()

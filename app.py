@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template
-from scrape import *
+from dynamic import *
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging as l
 
