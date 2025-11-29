@@ -5,4 +5,4 @@ data/backup.json
 data/lastpull.txt
 data/output.csv
 app.log
-updates.py
+initial.py

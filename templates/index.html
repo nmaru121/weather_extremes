@@ -42,7 +42,7 @@ function get_data() {console.log("Fetching data...");
 
                       // Hot Airports
                       let data_table_hot = document.getElementById("data_table_hot");
-                      data_table_hot.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
+                      data_table_hot.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Country</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
                       console.log(data);
                       for (let item of data.top_hot) {
                           data_table_hot.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.temp}</td></tr>`;
@@ -51,7 +51,7 @@ function get_data() {console.log("Fetching data...");
                       
                       // Windiest Airports
                       let data_table_wind_speeds = document.getElementById("data_table_wind_speeds");
-                      data_table_wind_speeds.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Sustained Winds (knots)</th></tr></thead><tbody>"; // Clear existing rows
+                      data_table_wind_speeds.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Country</th><th>Sustained Winds (knots)</th></tr></thead><tbody>"; // Clear existing rows
                       console.log(data);
                       for (let item of data.top_wind_speeds) {
                           data_table_wind_speeds.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.wspd}</td></tr>`;

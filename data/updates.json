@@ -1,5 +1,9 @@
 [
     {
+        "title": "0.1.1: Added Country Names",
+        "description": "I added country names to the main table."
+    },
+    {
         "title": "0.1: Adding updates log",
         "description": "This is the updates log. Welcome."
     }

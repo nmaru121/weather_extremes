@@ -54,10 +54,10 @@ def get_data():
     json.dump(loadobj, open("data/backup.json", "w"))
     newdata = pd.json_normalize(loadobj)
     newdata["receiptTime"] = pd.to_datetime(newdata["receiptTime"])
-    newdata["letterCode2"] = newdata["name"].split(",")[2].strip()
-    iso_codes = pd.read_csv("iso_codes.csv")[["country", "letterCode2"]]
+    newdata["letterCode2"] = newdata["name"].str.split(",").str[2].str.strip()
+    iso_codes = pd.read_csv("data/iso_codes.csv")[["country", "letterCode2"]]
     newdata = pd.merge(newdata, iso_codes, how="left", on="letterCode2")
-    newdata["name"] = newdata["name"].split(",")[0].strip()
+    newdata["name"] = newdata["name"].str.split(",").str[0].str.strip()
     finalsheet = newdata.loc[newdata.groupby('icaoId')['receiptTime'].idxmax()]
     # finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId") Not necessary, and does not work
     finalsheet.to_csv("data/output.csv")
