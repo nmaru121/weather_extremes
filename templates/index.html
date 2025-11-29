@@ -33,10 +33,10 @@ function get_data() {console.log("Fetching data...");
                   .then(response => response.json())
                   .then(data => {
                       let data_table_cold = document.getElementById("data_table_cold");
-                      data_table_cold.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
+                      data_table_cold.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Country</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
                       console.log(data);
                       for (let item of data.top_cold) {
-                          data_table_cold.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.temp}</td></tr>`;
+                          data_table_cold.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.temp}</td></tr>`;
                       }
                       data_table_cold.innerHTML += "</tbody>";
 
@@ -45,7 +45,7 @@ function get_data() {console.log("Fetching data...");
                       data_table_hot.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
                       console.log(data);
                       for (let item of data.top_hot) {
-                          data_table_hot.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.temp}</td></tr>`;
+                          data_table_hot.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.temp}</td></tr>`;
                       } 
                       data_table_hot.innerHTML += "</tbody>";
                       
@@ -54,7 +54,7 @@ function get_data() {console.log("Fetching data...");
                       data_table_wind_speeds.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Sustained Winds (knots)</th></tr></thead><tbody>"; // Clear existing rows
                       console.log(data);
                       for (let item of data.top_wind_speeds) {
-                          data_table_wind_speeds.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.wspd}</td></tr>`;
+                          data_table_wind_speeds.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.wspd}</td></tr>`;
                       }
                       data_table_wind_speeds.innerHTML += "</tbody>";
                       // Time Update

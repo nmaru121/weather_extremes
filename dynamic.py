@@ -54,14 +54,17 @@ def get_data():
     json.dump(loadobj, open("data/backup.json", "w"))
     newdata = pd.json_normalize(loadobj)
     newdata["receiptTime"] = pd.to_datetime(newdata["receiptTime"])
+    newdata["letterCode2"] = newdata["name"].split(",")[2].strip()
+    iso_codes = pd.read_csv("iso_codes.csv")[["country", "letterCode2"]]
+    newdata = pd.merge(newdata, iso_codes, how="left", on="letterCode2")
+    newdata["name"] = newdata["name"].split(",")[0].strip()
     finalsheet = newdata.loc[newdata.groupby('icaoId')['receiptTime'].idxmax()]
-    finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId")
+    # finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId") Not necessary, and does not work
     finalsheet.to_csv("data/output.csv")
     with open("data/lastpull.txt", "w") as f:
         f.write(dt.now(tz.utc).strftime("%Y%m%d_%H%M"))
     return exit_code
 
-#NOTE: Not yet putting this in prod, need to check what errors are coming
 #TODO Low priority, but could we optimize by appending on the second run?
 def run_pull():
     exit_code = get_data()
@@ -73,10 +76,10 @@ def run_pull():
 def spout_stats():
     sheet = pd.read_csv("data/output.csv")
     sheet["reportTime"] = pd.to_datetime(sheet["reportTime"]).dt.strftime("%Y-%m-%d %H:%M UTC")
-    wspd = sheet.nlargest(5, "wspd")[["reportTime","icaoId", "name", "wspd"]].to_dict(orient="records")
-    wgst = sheet.nlargest(5, "wgst")[["reportTime","icaoId", "name", "wgst"]].to_dict(orient="records")
-    cold = sheet.nsmallest(5, "temp")[["reportTime","icaoId", "name", "temp"]].to_dict(orient="records")
-    hot =  sheet.nlargest(5, "temp")[["reportTime", "icaoId", "name", "temp"]].to_dict(orient="records")
+    wspd = sheet.nlargest(5, "wspd")[["reportTime","icaoId", "name", "country", "wspd"]].to_dict(orient="records")
+    wgst = sheet.nlargest(5, "wgst")[["reportTime","icaoId", "name", "country", "wgst"]].to_dict(orient="records")
+    cold = sheet.nsmallest(5, "temp")[["reportTime","icaoId", "name", "country", "temp"]].to_dict(orient="records")
+    hot =  sheet.nlargest(5, "temp")[["reportTime", "icaoId", "name", "country", "temp"]].to_dict(orient="records")
     #precip = sheet.nlargest(5, "precip")[["reportTime", "icaoId", "Airport name", "precip"]].todict(orient='records')
     return wspd, wgst, cold, hot
 
