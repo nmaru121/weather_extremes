@@ -54,6 +54,7 @@ def get_data():
     json.dump(loadobj, open("data/backup.json", "w"))
     newdata = pd.json_normalize(loadobj)
     newdata["receiptTime"] = pd.to_datetime(newdata["receiptTime"])
+    newdata["orig_name"] = newdata["name"]
     newdata["letterCode2"] = newdata["name"].str.split(",").str[2].str.strip()
     iso_codes = pd.read_csv("data/iso_codes.csv")[["country", "letterCode2"]]
     newdata = pd.merge(newdata, iso_codes, how="left", on="letterCode2")
@@ -74,7 +75,7 @@ def run_pull():
     return
 
 def spout_stats():
-    sheet = pd.read_csv("data/output.csv")
+    sheet = pd.read_csv("data/output.csv").fillna("None found")
     sheet["reportTime"] = pd.to_datetime(sheet["reportTime"]).dt.strftime("%Y-%m-%d %H:%M UTC")
     wspd = sheet.nlargest(5, "wspd")[["reportTime","icaoId", "name", "country", "wspd"]].to_dict(orient="records")
     wgst = sheet.nlargest(5, "wgst")[["reportTime","icaoId", "name", "country", "wgst"]].to_dict(orient="records")
