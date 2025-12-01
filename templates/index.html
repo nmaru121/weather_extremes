@@ -32,9 +32,9 @@ function get_data() {console.log("Fetching data...");
                 fetch('/api/stats')
                   .then(response => response.json())
                   .then(data => {
+						console.log(data);
                       let data_table_cold = document.getElementById("data_table_cold");
                       data_table_cold.innerHTML = "<thead><tr><th>Observation Time</th><th>ICAO ID</th><th>Airport Name</th><th>Country</th><th>Temperature (Celsius)</th></tr></thead><tbody>"; // Clear existing rows
-                      console.log(data);
                       for (let item of data.top_cold) {
                           data_table_cold.innerHTML += `<tr><td>${item.reportTime}</td><td>${item.icaoId}</td><td>${item.name}</td><td>${item.country}</td><td>${item.temp}</td></tr>`;
                       }
