@@ -75,7 +75,8 @@ def run_pull():
     return
 
 def spout_stats():
-    sheet = pd.read_csv("data/output.csv").fillna("None found")
+    sheet = pd.read_csv("data/output.csv")
+    sheet[["name", "country"]] = sheet[["name", "country"]].fillna('None found')
     sheet["reportTime"] = pd.to_datetime(sheet["reportTime"]).dt.strftime("%Y-%m-%d %H:%M UTC")
     wspd = sheet.nlargest(5, "wspd")[["reportTime","icaoId", "name", "country", "wspd"]].to_dict(orient="records")
     wgst = sheet.nlargest(5, "wgst")[["reportTime","icaoId", "name", "country", "wgst"]].to_dict(orient="records")
