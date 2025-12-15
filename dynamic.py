@@ -6,8 +6,6 @@ import math
 from flask import redirect
 from time import sleep
 import logging as l
-
-
 #formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
 #l = logging.getLogger(__name__)
@@ -17,7 +15,8 @@ import logging as l
 
 # TODO: Logging system
 # TODO: Add error handling for network issues, invalid responses, etc.
-def get_data():   
+def get_data():
+    l.basicConfig(level=l.INFO)
     # Will need to check this when I import onto Pi
     exit_code = 0
     l.info("Pulling new data...")
@@ -60,10 +59,12 @@ def get_data():
     newdata = pd.merge(newdata, iso_codes, how="left", on="letterCode2")
     newdata["name"] = newdata["name"].str.split(",").str[0].str.strip()
     finalsheet = newdata.loc[newdata.groupby('icaoId')['receiptTime'].idxmax()]
+    finalsheet["wchill"] = finalsheet.apply(calc_wind_chill, axis=1)
     # finalsheet = pd.merge(finalsheet, data, how = "left", on = "icaoId") Not necessary, and does not work
     finalsheet.to_csv("data/output.csv")
     with open("data/lastpull.txt", "w") as f:
         f.write(dt.now(tz.utc).strftime("%Y%m%d_%H%M"))
+    l.info("Run pulled")
     return exit_code
 
 #TODO Low priority, but could we optimize by appending on the second run?
@@ -73,6 +74,17 @@ def run_pull():
         sleep(60)
         get_data()
     return
+
+def calc_wind_chill(row):
+    #NOTE: I don't know the wind chill formula in any other units than Farenheit and mph
+    # I'm British, but I live in America, so that's why I guess
+    temp = row["temp"] * 9 / 5 + 32 # Celsius to Farenheit
+    wspd = row["wspd"] * 1.15 # Knots to mph
+    chill = 35.74 + 0.6215 * temp - (35.75 * wspd**0.16) + (0.4275 * temp * wspd**0.16)
+    
+    # Now I have to turn it BACK into Celsius because... yknow
+    chill = (chill - 32) * 5/9
+    return chill
 
 def spout_stats():
     sheet = pd.read_csv("data/output.csv").fillna({"name": "Not Found", "country":"Not Found"})

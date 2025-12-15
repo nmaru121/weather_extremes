@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template 
+from markupsafe import escape
 from dynamic import *
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging as l
 
-l.basicConfig(filename="app.log", level=l.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+l.basicConfig(filename="app.log", level=l.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__ , template_folder='./templates')
 app.config['SERVER_NAME'] = 'localhost:8080'
@@ -41,6 +42,18 @@ def api_stats():
         "last_pull": last_pull_formatted
     }
     return jsonify(response)
+    
+@app.route('/api/<icaoId>', methods=['GET'])
+def api_airport(icaoId):
+    icaoId = escape(icaoId)
+    data = pd.read_csv("data/output.csv")
+    data = data.loc[data["icaoId"] == icaoId]
+    if data.empty:
+        return jsonify({"response_status": 404})
+    response = data.to_dict(orient="records")
+    response= {"response_status": 200, "content":response}
+    return jsonify(response)
+
 
 @app.route('/updates', methods=['GET'])
 def updates_page():
