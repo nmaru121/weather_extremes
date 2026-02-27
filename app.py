@@ -3,10 +3,11 @@ from markupsafe import escape
 from dynamic import *
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging as l
+from markdown import markdown as md
 
 l.basicConfig(filename="app.log", level=l.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
-app = Flask(__name__ , template_folder='./templates')
+app = Flask(__name__ , template_folder='./templates', static_url_path=None)
 app.config['SERVER_NAME'] = 'localhost:8080'
 
 initialize = False
@@ -54,6 +55,12 @@ def api_airport(icaoId):
     response= {"response_status": 200, "content":response}
     return jsonify(response)
 
+@app.route("/article") # The very simplest form of this
+def latest_article():
+    body = md(open("static/articles/0_welcome.md", 'r').read())
+    return render_template('article.html', body=body)
+
+### TODO: Admin routes, so I can add stuff thru the website
 
 @app.route('/updates', methods=['GET'])
 def updates_page():

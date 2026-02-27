@@ -6,8 +6,8 @@
     <ul>
         {% for update in updates %}
             <li>
-                <h3>{{ update.title }}</h3>
-                <p>{{ update.description }}</p>
+                <h2>{{ update.title | safe}}</h2>
+                <p>{{ update.description | safe}}</p>
             </li>
         {% endfor %}
     </ul>

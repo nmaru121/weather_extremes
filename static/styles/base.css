@@ -6,6 +6,11 @@ body {
     color:white;
 }
 
+img {
+  width:100%;
+  height:auto;
+}
+
 footer {
     padding: 10px;
     text-align: center;
@@ -54,6 +59,11 @@ table, th, td {
 th, td {
     padding: 10px;
     text-align: center;    
+}
+
+.textboxes {
+  padding-left: 10%;
+  padding-right:10%;
 }
 
 .updates {
