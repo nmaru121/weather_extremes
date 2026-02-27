@@ -57,7 +57,7 @@ def api_airport(icaoId):
 
 @app.route("/article") # The very simplest form of this
 def latest_article():
-    body = md(open("static/articles/0_welcome.md", 'r').read())
+    body = md(open("/static/articles/0_welcome.md", 'r').read())
     return render_template('article.html', body=body)
 
 ### TODO: Admin routes, so I can add stuff thru the website
